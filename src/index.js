@@ -13,41 +13,48 @@ import './index.css';
 //use className instead of class
 //you need to use a closing tag on EVERY html element!!!
 //you can nest components within other react components.
+const books = [
+    {
+        img: 'https://images-na.ssl-images-amazon.com/images/I/91RQ5d-eIqL.jpg',
+        title: 'Percy Jackson and The Lighting Thief',
+        author: 'Rick Riordan',
 
-const firstBook = {
-    img: 'https://images-na.ssl-images-amazon.com/images/I/91RQ5d-eIqL.jpg',
-    title: 'Percy Jackson and The Lighting Thief',
-    author: 'Rick Riordan'
+    },
+    {
+        img: 'https://m.media-amazon.com/images/I/413lxIe20jL._SY346_.jpg',
+        title: 'Harry Potter and The Sorcerer\'s Stone',
+        author: 'J.K Rowling',
+    },
+];
 
-}
-const secondBook = {
-    img: 'https://m.media-amazon.com/images/I/413lxIe20jL._SY346_.jpg',
-    title: 'Harry Potter and The Sorcerer\'s Stone',
-    author: 'J.K Rowling'
-}
-const Booklist = () => {
+const names = ['john', 'peter', 'susan'];
+const newNames = names.map((name) => {
+    return <h1>{name}</h1>;
+});
+
+console.log(newNames);
+
+function BookList() {
     return (
         <section className='booklist'>
-            <Book img={firstBook.img} title={firstBook.title} author={firstBook.author}>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo officia asperiores autem at voluptatum
-                    ipsa ipsam dolore dicta, impedit modi.
-                </p>
-            </Book>
-            <Book img={secondBook.img} title={secondBook.title} author={secondBook.author} />
-
+            {books.map((book) => {
+                const { img, title, author } = book;
+                return (
+                    <Book book={book}></Book>
+                );
+            })}
         </section>
     );
 }
-const Book = ({ img, title, author, children }) => { //<- do props this way instead!!!!!
-    // const {img, title, author} = props
+
+const Book = (props) => { //<- do props this way instead!!!!!
+    const { img, title, author } = props.book;
     return <article className='book'> {/*This is called implicit return cause it doesn't have paranthesis*/}
         <img src={img} className='bookimage' alt="Percy Jackson Cover" />
         <h2>{title}</h2> {/*title is a variable*/}
         <h1>{author}</h1>
-        {children}
         {/* <p>{6 + 6}</p> */}
     </article>
 }
 
-ReactDom.render(<Booklist />, document.getElementById('root')); //whatever we're going to render, and where we are going to render it
+ReactDom.render(<BookList />, document.getElementById('root')); //whatever we're going to render, and where we are going to render it
