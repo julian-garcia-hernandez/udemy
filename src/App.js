@@ -1,7 +1,14 @@
+import './App.css';
+import { Configurations, Navbar, Banner } from './components';
+
 function App() {
-    <div className="App">
-        <main>
-            
-        </main>
-    </div>
+    return (
+        <div className="App">
+            <Configurations />
+            <Navbar />
+            <Banner />
+        </div>
+    )
 }
+
+export default App
