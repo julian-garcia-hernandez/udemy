@@ -3,6 +3,7 @@ import ReactDom from 'react-dom'
 
 //CSS
 import './index.css';
+import { books } from './book'; //if it is a named export, you need to have the curly braces
 //stateless functional component
 //you must always return JSX
 //RULES:
@@ -13,48 +14,55 @@ import './index.css';
 //use className instead of class
 //you need to use a closing tag on EVERY html element!!!
 //you can nest components within other react components.
-const books = [
-    {
-        img: 'https://images-na.ssl-images-amazon.com/images/I/91RQ5d-eIqL.jpg',
-        title: 'Percy Jackson and The Lighting Thief',
-        author: 'Rick Riordan',
 
-    },
-    {
-        img: 'https://m.media-amazon.com/images/I/413lxIe20jL._SY346_.jpg',
-        title: 'Harry Potter and The Sorcerer\'s Stone',
-        author: 'J.K Rowling',
-    },
-];
 
-const names = ['john', 'peter', 'susan'];
-const newNames = names.map((name) => {
-    return <h1>{name}</h1>;
-});
 
-console.log(newNames);
+// const names = ['john', 'peter', 'susan']; //this is another array object
 
+// const newNames = names.map((name) => {
+//     return <h1>{name}</h1>;
+// });
+
+//since we can't render objects in their entirety we need to destructure their props
 function BookList() {
     return (
         <section className='booklist'>
-            {books.map((book) => {
-                const { img, title, author } = book;
+            {books.map((book) => { //.map() runs a function on every value in books
+                //const { id, img, title, author } = book; //destructure props instead of doing . notation (books.img, books.title)
+                //console.log(book);
                 return (
-                    <Book book={book}></Book>
+                    // <Book /*key is a prop and book.id is the object passed into the property*/ key={book.id} book={book} /> //instead just pass entire book object as a prop
+                    <Book /*key is a prop and book.id is the object passed into the property*/ key={book.id} {...book} /> //instead just pass entire book object as a prop
                 );
-            })}
+            })/* {returnBooks} */}
         </section>
     );
 }
 
-const Book = (props) => { //<- do props this way instead!!!!!
-    const { img, title, author } = props.book;
-    return <article className='book'> {/*This is called implicit return cause it doesn't have paranthesis*/}
+const Book = ({ img, title, author }) => { //<- do props this way instead!!!!!
+    // const { img, title, author } = props.book; //we're not destructuring props rather the book property specifically
+    // const { img, title, author } = props; //we will use this method since we used the spread operator when passing in the book properties within the map method above
+    const clickHandler = (e) => {
+        console.log(e);
+        console.log(e.target);
+        alert('hello world');
+    };
+    const complexExample = (author) => {
+        console.log(author);
+    }
+    return <article className='book' onMouseOver={() => {
+        console.log(title);
+    }}> {/*This is called implicit return cause it doesn't have paranthesis*/}
         <img src={img} className='bookimage' alt="Percy Jackson Cover" />
         <h2>{title}</h2> {/*title is a variable*/}
-        <h1>{author}</h1>
+        <h1 onClick={() => {    //this is using inline function for the event handler function
+            console.log(title);
+        }}>{author}</h1>
+        <button type='button' /*On click is the event, function within braces is the handler*/ onClick={clickHandler}>Using an event handler with reference</button>
+        {/* <button type='button' onClick={complexExample(author) this is will result in an invoked function as soon as the page loads | wrong}>More complex example</button> */}
+        <button type='button' onClick={() => complexExample(author)}>More complex example</button> {/*event handler needs to be called using an arrow functio instead if it has parameters like the author in this case*/}
         {/* <p>{6 + 6}</p> */}
-    </article>
+    </article >
 }
 
 ReactDom.render(<BookList />, document.getElementById('root')); //whatever we're going to render, and where we are going to render it
